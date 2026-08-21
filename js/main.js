@@ -57,7 +57,8 @@
         github:'<path d="M9 19c-4 1.5-4-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1-.3-3.4 1.3a11.8 11.8 0 0 0-6.2 0C6.5 2.8 5.5 3.1 5.5 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/>',
         linkedin:'<rect x="2.5" y="9.5" width="4" height="11.5"/><circle cx="4.5" cy="4.5" r="2"/><path d="M10.5 21v-6.5a3.5 3.5 0 0 1 7 0V21"/><path d="M10.5 9.5h4v2"/>',
         twitter:'<path d="M4 4l16 16M20 4L4 20"/>',
-        ext:'<path d="M14 4h6v6"/><path d="M20 4L10 14"/><path d="M20 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h5"/>'
+        ext:'<path d="M14 4h6v6"/><path d="M20 4L10 14"/><path d="M20 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h5"/>',
+        db:'<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.7 4 3 9 3s9-1.3 9-3V5"/><path d="M3 11v6c0 1.7 4 3 9 3s9-1.3 9-3v-6"/><path d="M3 17v2c0 1.7 4 3 9 3s9-1.3 9-3v-2"/>'
     };
     function ic(n, cls) {
         return '<svg class="ic ' + (cls || "") + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONS[n] || "") + "</svg>";
@@ -73,28 +74,43 @@
 
     /* ---------------- chrome builders ---------------- */
     var HREF = {
-        company: { about: "about.html", experience: "experience.html", projects: "projects.html", contact: "contact.html" },
-        services: { software: "services.html", hosting: "hosting.html", vps: "vps.html" }
+        company: { about:"about.html", experience:"experience.html", projects:"projects.html", contact:"contact.html" },
+        services: { hosting:"hosting.html", vps:"vps.html", software:"services.html", webDesign:"web-design.html", laravel:"laravel.html", mobile:"mobile.html", database:"database.html" }
     };
     var MPICON = {
-        company: { about: "user", experience: "chart", projects: "code", contact: "mail" },
-        services: { software: "rocket", hosting: "server", vps: "cloud" }
+        company: { about:"user", experience:"chart", projects:"code", contact:"mail" },
+        services: { hosting:"server", vps:"cloud", software:"rocket", webDesign:"globe", laravel:"code", mobile:"phone", database:"db" }
     };
     var CARDHREF = { company: "about.html", services: "vps.html" };
     var CARDIMG = { company: "webify-story-team", services: "webify-cloud-infra" };
 
     function megaPanel(key) {
-        var d = L.nav[key], items = "";
-        Object.keys(d.items).forEach(function (id) {
-            var it = d.items[id];
-            items += '<a class="mp-link" href="' + HREF[key][id] + '"><span class="mp-ic">' + ic(MPICON[key][id]) +
-                '</span><span class="mp-tx"><b>' + it.t + "</b><small>" + it.d +
-                '</small></span><span class="mp-arrow">' + ic("arrow") + "</span></a>";
-        });
-        return '<section class="mega-panel mp-' + key + '" data-mp="' + key + '"><div class="mp-grid"><div class="mp-links"><p class="mp-blurb">' +
-            d.blurb + "</p>" + items + '</div><a class="mp-card" href="' + CARDHREF[key] +
+        var d = L.nav[key], linksHtml = "";
+        if (d.groups) {
+            linksHtml = '<div class="mp-groups">' + Object.keys(d.groups).map(function (gk) {
+                var g = d.groups[gk];
+                return '<div class="mp-group"><p class="mp-gt">' + g.t + '</p>' +
+                    Object.keys(g.items).map(function (id) {
+                        var it = g.items[id];
+                        return '<a class="mp-link" href="' + HREF[key][id] + '"><span class="mp-ic">' + ic(MPICON[key][id]) +
+                            '</span><span class="mp-tx"><b>' + it.t + '</b><small>' + it.d +
+                            '</small></span><span class="mp-arrow">' + ic("arrow") + '</span></a>';
+                    }).join("") + '</div>';
+            }).join("") + '</div>';
+        } else {
+            linksHtml = '<div class="mp-links"><p class="mp-blurb">' + d.blurb + '</p>' +
+                Object.keys(d.items).map(function (id) {
+                    var it = d.items[id];
+                    return '<a class="mp-link" href="' + HREF[key][id] + '"><span class="mp-ic">' + ic(MPICON[key][id]) +
+                        '</span><span class="mp-tx"><b>' + it.t + '</b><small>' + it.d +
+                        '</small></span><span class="mp-arrow">' + ic("arrow") + '</span></a>';
+                }).join("") + '</div>';
+        }
+        return '<section class="mega-panel mp-' + key + '" data-mp="' + key + '"><div class="mp-grid">' +
+            linksHtml +
+            '<a class="mp-card" href="' + CARDHREF[key] +
             '"><img src="https://picsum.photos/seed/' + CARDIMG[key] + '/560/400" alt=""><span class="mp-card-ov"><b>' +
-            d.card.title + "</b><small>" + d.card.desc + "</small><u>" + d.card.cta + " " + ic("arrow", "mini") + "</u></span></a></div></section>";
+            d.card.title + '</b><small>' + d.card.desc + '</small><u>' + d.card.cta + ' ' + ic("arrow", "mini") + '</u></span></a></div></section>';
     }
 
     function langSw(cls) {
@@ -125,7 +141,7 @@
             '<div class="mega" id="mega" aria-hidden="true"><i class="mega-caret"></i><div class="mega-inner" id="megaInner">' +
             megaPanel("company") + megaPanel("services") + "</div></div></nav>" +
             '<div class="hdr-utils"><button class="icon-btn" id="themeBtn" type="button" aria-label="' + L.theme.toggle + '"></button>' +
-            '<a class="portal" href="#" title="client.webify.af">' + ic("user") + "<span>" + L.header.portal + "</span></a>" +
+            '<a class="portal" href="login.html" title="client.webify.af">' + ic("user") + "<span>" + L.header.portal + "</span></a>" +
             '<a class="btn btn-accent btn-cut" href="pricing.html">' + L.header.start + "</a>" +
             '<button class="icon-btn icon-burger" id="burger" type="button" aria-label="' + L.header.menu + '" aria-expanded="false">' + ic("menu") + "</button></div></div>";
     }
@@ -134,11 +150,17 @@
         return '<li><a href="' + href + '" data-nk="' + nk + '">' + label + "</a></li>";
     }
     function dwGroup(label, key) {
-        var inner = "";
-        Object.keys(L.nav[key].items).forEach(function (id) {
-            inner += '<a href="' + HREF[key][id] + '">' + L.nav[key].items[id].t + "</a>";
-        });
-        return '<li class="dw-acc"><button type="button" class="dw-t">' + label + ic("chev") + '</button><div class="dw-p"><div class="dw-in">' + inner + "</div></div></li>";
+        var d = L.nav[key], inner = "";
+        if (d.groups) {
+            Object.keys(d.groups).forEach(function (gk) {
+                var g = d.groups[gk];
+                inner += '<p class="dw-gt">' + g.t + '</p>';
+                Object.keys(g.items).forEach(function (id) { inner += '<a href="' + HREF[key][id] + '">' + g.items[id].t + '</a>'; });
+            });
+        } else {
+            Object.keys(d.items).forEach(function (id) { inner += '<a href="' + HREF[key][id] + '">' + d.items[id].t + '</a>'; });
+        }
+        return '<li class="dw-acc"><button type="button" class="dw-t">' + label + ic("chev") + '</button><div class="dw-p"><div class="dw-in">' + inner + '</div></div></li>';
     }
     function buildDrawer() {
         $("#drawer").innerHTML =
@@ -491,13 +513,92 @@
                 return '<a class="card prof reveal" href="' + x.href + '" style="--d:' + i * 80 + 'ms"><span class="cic">' + ic(ics[i] || "globe") +
                     "</span><b>" + x.n + "</b><small>" + x.d + '</small><span class="more">' + ic("ext", "mini") + "</span></a>";
             }).join("") + "</div>";
+        },
+        loginForm: function (el) {
+            var f = L.login.form;
+            el.innerHTML =
+                '<form class="js-form" novalidate>' +
+                '<div class="login-alt">' +
+                '<button type="button" class="btn btn-line">' + ic("github","mini") + ' GitHub</button>' +
+                '<button type="button" class="btn btn-line">' + ic("mail","mini") + ' Google</button>' +
+                '</div>' +
+                '<div class="login-div">' + f.or + '</div>' +
+                '<div class="field"><label>' + f.emailL + '</label><input type="email" required data-i18n-ph="login.form.ph_email"><small class="fmsg"></small></div>' +
+                '<div class="field"><label>' + f.passL + '</label><input type="password" required data-i18n-ph="login.form.ph_pass"><small class="fmsg"></small></div>' +
+                '<div class="login-foot"><label class="chk"><input type="checkbox"> ' + f.remember + '</label><a href="#">' + f.forgot + '</a></div>' +
+                '<button class="btn btn-accent btn-cut" style="width:100%;margin-top:16px" type="submit">' + f.submit + '</button>' +
+                '<p style="text-align:center;margin-top:16px;font-size:.84rem;color:var(--ink2)">' + f.noAcc + ' <a href="contact.html">' + f.signup + '</a></p>' +
+                '</form>';
+        },
+        loginPerks: function (el) {
+            el.innerHTML = '<div class="login-perks">' + L.login.perks.map(function (p) {
+                return '<div class="perk"><span class="cic">' + ic(p.ic) + '</span><div><b>' + p.t + '</b><small>' + p.d + '</small></div></div>';
+            }).join("") + '</div>';
+        },
+        dlv: function (el, arr) {
+            el.innerHTML = '<div class="grid g3">' + arr.map(function (d, i) {
+                return '<article class="card dlv-card reveal" style="--d:' + i * 80 + 'ms"><div class="dlv-head"><b>' + d.num + '</b></div>' +
+                    '<div class="dlv-body"><span class="cic">' + ic(d.ic) + '</span><h3>' + d.t + '</h3><p>' + d.d + '</p><ul>' +
+                    d.pts.map(function (p) { return '<li>' + p + '</li>'; }).join("") + '</ul></div></article>';
+            }).join("") + '</div>';
+        },
+        integrations: function (el, arr) {
+            el.innerHTML = '<div class="int-grid">' + arr.map(function (it, i) {
+                return '<div class="int-chip reveal" style="--d:' + i * 60 + 'ms"><span class="cic">' + ic(it.ic) + '</span><b>' + it.n + '</b><small>' + it.d + '</small></div>';
+            }).join("") + '</div>';
+        },
+        dbSchema: function (el) {
+            var s = L.database.schema || {};
+            var cols = s.cols || ["—","—","—"];
+            var rows = s.rows || [];
+            el.innerHTML = '<div class="db-schema reveal"><table class="tbl-mini"><caption>' +
+                (s.titleTbl || s.title || "") + '</caption><thead><tr><th>' +
+                cols[0] + '</th><th>' + cols[1] + '</th><th>' + cols[2] + '</th></tr></thead><tbody>' +
+                rows.map(function (r) {
+                    return '<tr><td>' + (r.pk ? '<span class="pk">🔑 ' : '') + r.c + (r.pk ? '</span>' : '') +
+                        '</td><td>' + r.t + '</td><td>' + r.n + '</td></tr>';
+                }).join("") + '</tbody></table></div>';
+        },
+        faqWebDesign: function (el) { el.innerHTML = faqHTML(L.webDesign.faq.items); },
+        faqLaravel: function (el) { el.innerHTML = faqHTML(L.laravel.faq.items); },
+        faqMobile: function (el) { el.innerHTML = faqHTML(L.mobile.faq.items); },
+        faqDb: function (el) { el.innerHTML = faqHTML(L.database.faq.items); },
+        procWeb: function (el) { el.innerHTML = '<ol class="steps">' + L.webDesign.proc.steps.map(function (s, i) { return '<li class="reveal" style="--d:' + i * 100 + 'ms"><b>' + (i + 1) + '</b><div><h3>' + s.t + '</h3><p>' + s.d + '</p></div></li>'; }).join("") + '</ol>'; },
+        procLaravel: function (el) { el.innerHTML = '<ol class="steps">' + L.laravel.proc.steps.map(function (s, i) { return '<li class="reveal" style="--d:' + i * 100 + 'ms"><b>' + (i + 1) + '</b><div><h3>' + s.t + '</h3><p>' + s.d + '</p></div></li>'; }).join("") + '</ol>'; },
+        procMobile: function (el) { el.innerHTML = '<ol class="steps">' + L.mobile.proc.steps.map(function (s, i) { return '<li class="reveal" style="--d:' + i * 100 + 'ms"><b>' + (i + 1) + '</b><div><h3>' + s.t + '</h3><p>' + s.d + '</p></div></li>'; }).join("") + '</ol>'; },
+        procDb: function (el) { el.innerHTML = '<ol class="steps">' + L.database.proc.steps.map(function (s, i) { return '<li class="reveal" style="--d:' + i * 100 + 'ms"><b>' + (i + 1) + '</b><div><h3>' + s.t + '</h3><p>' + s.d + '</p></div></li>'; }).join("") + '</ol>'; },
+        capsWeb: function (el) { el.innerHTML = '<div class="grid g3">' + L.webDesign.caps.items.map(function (c, i) { return '<div class="card reveal" style="--d:' + i * 70 + 'ms"><span class="cic">' + ic(c.ic) + '</span><h3>' + c.t + '</h3><p>' + c.d + '</p></div>'; }).join("") + '</div>'; },
+        capsLaravel: function (el) { el.innerHTML = '<div class="grid g3">' + L.laravel.caps.items.map(function (c, i) { return '<div class="card reveal" style="--d:' + i * 70 + 'ms"><span class="cic">' + ic(c.ic) + '</span><h3>' + c.t + '</h3><p>' + c.d + '</p></div>'; }).join("") + '</div>'; },
+        capsMobile: function (el) { el.innerHTML = '<div class="grid g3">' + L.mobile.caps.items.map(function (c, i) { return '<div class="card reveal" style="--d:' + i * 70 + 'ms"><span class="cic">' + ic(c.ic) + '</span><h3>' + c.t + '</h3><p>' + c.d + '</p></div>'; }).join("") + '</div>'; },
+        capsDb: function (el) { el.innerHTML = '<div class="grid g3">' + L.database.caps.items.map(function (c, i) { return '<div class="card reveal" style="--d:' + i * 70 + 'ms"><span class="cic">' + ic(c.ic) + '</span><h3>' + c.t + '</h3><p>' + c.d + '</p></div>'; }).join("") + '</div>'; },
+        featLaravel: function (el) { el.innerHTML = '<div class="grid g3">' + L.laravel.feat.items.map(function (f, i) { return '<div class="card reveal" style="--d:' + i * 70 + 'ms"><span class="cic">' + ic(f.ic) + '</span><h3>' + f.t + '</h3><p>' + f.d + '</p></div>'; }).join("") + '</div>'; },
+        featMobile: function (el) { el.innerHTML = '<div class="grid g3">' + L.mobile.feat.items.map(function (f, i) { return '<div class="card reveal" style="--d:' + i * 70 + 'ms"><span class="cic">' + ic(f.ic) + '</span><h3>' + f.t + '</h3><p>' + f.d + '</p></div>'; }).join("") + '</div>'; },
+        techStack: function (el) { el.innerHTML = '<div class="chips reveal">' + (L[PAGE].stack || L.services.stack).items.map(function (c) { return '<span class="chip">' + c + '</span>'; }).join("") + '</div>'; },
+        svcBand: function (el) {
+            var b = L[PAGE].band;
+            el.innerHTML = '<div class="container band-in reveal"><h2>' + b.t + '</h2><p>' + b.d + '</p><div class="band-btns"><a class="btn btn-accent btn-cut" href="' + b.a1.href + '">' + b.a1.t + '</a><a class="btn btn-ghostw" href="' + b.a2.href + '">' + b.a2.t + '</a></div></div>';
         }
     };
 
     function runRenders() {
         $$("[data-render]").forEach(function (el) {
-            var fn = REG[el.dataset.render];
-            if (fn) { el.innerHTML = ""; fn(el); }
+            var key = el.dataset.render, fn = REG[key];
+            if (!fn) return;
+            try {
+                if (key === "dlv") {
+                    var src = (L[PAGE] && L[PAGE].dlv && L[PAGE].dlv.items) || [];
+                    el.innerHTML = ""; fn(el, src);
+                } else if (key === "integrations") {
+                    var src2 =
+                        (L[PAGE] && L[PAGE].int && L[PAGE].int.items) ||
+                        (L[PAGE] && L[PAGE].tech && L[PAGE].tech.items) || [];
+                    el.innerHTML = ""; fn(el, src2);
+                } else {
+                    el.innerHTML = ""; fn(el);
+                }
+            } catch (err) {
+                if (window.console) console.error("[webify] renderer '" + key + "' failed:", err);
+            }
         });
     }
 
@@ -590,7 +691,11 @@
     }
 
     function updateActiveNav() {
-        var map = { about: "company", experience: "company", projects: "company", contact: "company", hosting: "services", vps: "services" };
+        var map = {
+            about:"company", experience:"company", projects:"company", contact:"company",
+            hosting:"services", vps:"services", services:"services",
+            webDesign:"services", laravel:"services", mobile:"services", database:"services"
+        };
         var nk = map[PAGE] || PAGE;
         $$(".nav-a, .dw-list>li>a").forEach(function (a) {
             var on = a.dataset.nk === nk;

@@ -2,7 +2,7 @@
 window.WEBIFY_LANGS = window.WEBIFY_LANGS || {};
 window.WEBIFY_LANGS.en = {
     code:"en", dir:"ltr", htmlLang:"en", name:"EN",
-    meta:{home:"Home",about:"About Us",projects:"Projects",experience:"Experience",contact:"Contact",vps:"Virtual Private Servers",hosting:"Web Hosting",services:"Software Services",pricing:"Pricing",support:"Support"},
+    meta:{home:"Home",about:"About Us",projects:"Projects",experience:"Experience",contact:"Contact",vps:"Virtual Private Servers",hosting:"Web Hosting",services:"Software Services",pricing:"Pricing",support:"Support",login:"Client Login",webDesign:"Website Design",laravel:"Laravel Development",mobile:"Mobile Development",database:"Database Design"},
     brand:{name:"Webify",tld:".af",tag:"Software Development • Hosting • VPS"},
     topbar:{phone:"+93 79 000 0000",email:"hello@webify.af",status:"All systems operational"},
     theme:{toggle:"Toggle light/dark theme"},
@@ -11,9 +11,21 @@ window.WEBIFY_LANGS.en = {
         company:{label:"Company",blurb:"Who we are — our story, experience and work",
             card:{title:"Built in Kabul",desc:"From idea to global product, with a team from Afghanistan.",cta:"About us"},
             items:{about:{t:"About Us",d:"Our story, values and team"},experience:{t:"Experience",d:"Career path, freelancing and open source"},projects:{t:"Projects",d:"Portfolio and GitHub repositories"},contact:{t:"Contact Us",d:"Start a conversation"}}},
-        services:{label:"Services",blurb:"Custom software, hosting and virtual servers",
-            card:{title:"Webify Cloud Infrastructure",desc:"99.9% uptime and 24/7 support.",cta:"Get started"},
-            items:{software:{t:"Software Services",d:"Web, mobile and SaaS products"},hosting:{t:"Web Hosting",d:"Shared, cloud and managed WordPress"},vps:{t:"VPS Servers",d:"Dedicated resources with NVMe storage"}}}},
+            services:{label:"Services",blurb:"Custom software, hosting and virtual servers",
+                card:{title:"Webify Cloud Infrastructure",desc:"99.9% uptime and 24/7 support.",cta:"Get started"},
+                groups:{
+                    infra:{t:"Infrastructure",items:{
+                            hosting:{t:"Web Hosting",d:"Shared, cloud and managed WordPress"},
+                            vps:{t:"VPS Servers",d:"Dedicated resources with NVMe storage"}
+                        }},
+                    dev:{t:"Development",items:{
+                            software:{t:"Software Services",d:"Web, mobile and SaaS products"},
+                            webDesign:{t:"Website Design",d:"UI/UX, responsive and SEO-focused"},
+                            laravel:{t:"Laravel Development",d:"Enterprise systems and SaaS with Laravel"},
+                            mobile:{t:"Mobile Development",d:"iOS & Android with Flutter"},
+                            database:{t:"Database Design",d:"Schema, optimization and migration"}
+                        }}
+                }}},
     common:{from:"From",perMonth:"/ mo",popular:"Most Popular",learnMore:"Learn more",monthly:"Monthly",yearly:"Yearly",saveTip:"-20%",send:"Send",required:"This field is required",invalidEmail:"Enter a valid email",formOk:"Your message has been received; we will reply soon.",demo:"Demo",code:"Code",choose:"Select",plan:"Plan",specs:"Specs",price:"Price"},
     home:{
         slides:[
@@ -151,6 +163,81 @@ window.WEBIFY_LANGS.en = {
         none:"No results found.",
         ticket:{kicker:"Tickets",title:"Need an urgent answer?",d:"Our ticketing system is live in the client portal; or email us directly.",cta:{t:"Open a ticket",href:"#"},mail:"support@webify.af"},
         status:{kicker:"Status",title:"Live service status",d:"Follow uptime, incidents and announcements on the status page.",pill:"All systems operational",cta:{t:"Status page",href:"#"}}},
+    login:{
+        hero:{kicker:"Client Portal",title:"Sign in to your account",sub:"Manage services, invoices and support tickets in one place."},
+        form:{emailL:"Email",passL:"Password",ph_email:"you@example.com",ph_pass:"Your password",remember:"Remember me",forgot:"Forgot password?",submit:"Sign in",or:"or sign in with",noAcc:"Don't have an account?",signup:"Request a new account"},
+        side:{kicker:"Unified portal",title:"Every service, one dashboard",d:"Manage hosting, VPS, invoices and tickets from a single panel."},
+        perks:[
+            {ic:"shield",t:"Two-factor authentication",d:"Account security with 2FA and secure login."},
+            {ic:"server",t:"Service management",d:"Provision, upgrade and monitor hosting and VPS."},
+            {ic:"dollar",t:"Invoices & billing",d:"Online payments and full history."},
+            {ic:"headset",t:"Support tickets",d:"Track requests with a clear SLA."}]},
+    webDesign:{
+        hero:{kicker:"Website Design",title:"A website that sells, not just shows",sub:"Modern UI, fully responsive and optimised for search engines."},
+        pnLabel:"Web design",pn:[{id:"caps",l:"Capabilities"},{id:"deliverables",l:"Deliverables"},{id:"process",l:"Process"},{id:"stack",l:"Technologies"},{id:"faq",l:"FAQ"}],
+        caps:{kicker:"What we design",title:"Website design services",
+            items:[{ic:"pen",t:"UI/UX design",d:"User research, wireframes and a polished visual interface."},{ic:"globe",t:"Responsive",d:"Great experience on mobile, tablet and desktop."},{ic:"chart",t:"Technical SEO",d:"Speed, structure and structured data."},{ic:"rocket",t:"Performance",d:"Green Core Web Vitals and sub-2-second loads."},{ic:"shield",t:"Baseline security",d:"HTTPS, security headers and login protection."},{ic:"refresh",t:"Maintenance",d:"Content updates, backups and monitoring."}]},
+        dlv:{kicker:"Deliverables",title:"What you receive",
+            items:[
+                {num:"01",ic:"pen",t:"Visual design",d:"Final design in Figma with every page.",pts:["Extensible design system","Colour palette & typography","Light & dark modes"]},
+                {num:"02",ic:"code",t:"Front-end code",d:"HTML/CSS/JS or React/Vue components.",pts:["Clean, documented code","Fully responsive","WCAG accessibility"]},
+                {num:"03",ic:"rocket",t:"Launch & SEO",d:"Deployed on your hosting with optimisation.",pts:["Domain & SSL setup","Meta & schema","Initial performance report"]}]},
+        proc:{kicker:"Process",title:"From brief to launch",
+            steps:[{t:"Discover",d:"Brand, audience and goals session."},{t:"Wireframe",d:"Page structure and user flows."},{t:"Visual design",d:"Final design in Figma with your feedback."},{t:"Develop",d:"Responsive build and cross-device testing."},{t:"Launch",d:"Deployment, training and 30 days free support."}]},
+        stack:{kicker:"Technologies",title:"Design and build tools",items:["Figma","HTML5","CSS3","Tailwind","React","Vue","Next.js","Nuxt","GSAP","Framer Motion"]},
+        faq:{kicker:"FAQ",title:"Web design questions",
+            items:[{q:"How long does a design project take?",a:"Usually 3 to 6 weeks depending on pages and complexity."},{q:"Do you design WordPress sites too?",a:"Yes — both static/SPA sites and custom WordPress."},{q:"Do you provide copy and images?",a:"Copywriting and stock photography are available on request."},{q:"What support is included after delivery?",a:"30 days of free support for bug fixes and minor changes."}]},
+        band:{t:"Your next design, with us",d:"From a single landing page to a full corporate site.",a1:{t:"Start a project",href:"contact.html"},a2:{t:"See portfolio",href:"projects.html"}}},
+    laravel:{
+        hero:{kicker:"Laravel Development",title:"Stable systems with Laravel",sub:"SaaS, APIs and enterprise panels built on one of PHP's most mature frameworks."},
+        pnLabel:"Laravel",pn:[{id:"caps",l:"What we build"},{id:"features",l:"Features"},{id:"int",l:"Integrations"},{id:"process",l:"Process"},{id:"faq",l:"FAQ"}],
+        caps:{kicker:"What we build",title:"Our Laravel projects",
+            items:[{ic:"rocket",t:"SaaS products",d:"Multi-tenant architecture with subscriptions and billing."},{ic:"plug",t:"RESTful APIs",d:"OpenAPI docs and JWT/Sanctum auth."},{ic:"code",t:"Admin panels",d:"Filament or custom dashboards for your team."},{ic:"chart",t:"Reporting",d:"Analytical dashboards with Laravel queues."},{ic:"shield",t:"Auth systems",d:"Login, roles and permissions with Breeze/Jetstream."},{ic:"refresh",t:"Legacy migration",d:"Move from raw PHP or older frameworks."}]},
+        feat:{kicker:"Features",title:"Why Laravel is our choice",
+            items:[{ic:"bolt",t:"Fast development",d:"Artisan, Eloquent and a standard structure."},{ic:"shield",t:"Built-in security",d:"CSRF, XSS and SQL-injection protection."},{ic:"cpu",t:"Queues & cache",d:"Horizon for queues and Redis for cache."},{ic:"globe",t:"Testable",d:"Pest/PHPUnit with automated CI."},{ic:"plug",t:"Rich ecosystem",d:"Filament, Livewire, Inertia and Vapor."},{ic:"refresh",t:"Easy maintenance",d:"Clear structure and thorough docs."}]},
+        int:{kicker:"Integrations",title:"Connect to any service",
+            items:[{ic:"dollar",n:"Stripe",d:"Payments & subscriptions"},{ic:"plug",n:"PayPal",d:"Global payments"},{ic:"mail",n:"SendGrid",d:"Transactional email"},{ic:"phone",n:"Twilio",d:"SMS & voice"},{ic:"cloud",n:"AWS S3",d:"File storage"},{ic:"code",n:"GitHub",d:"CI/CD"},{ic:"chart",n:"Google Analytics",d:"Tracking"},{ic:"shield",n:"Cloudflare",d:"Security & CDN"}]},
+        proc:{kicker:"Process",title:"How we ship a Laravel project",
+            steps:[{t:"Analyse",d:"Requirements, data model and APIs."},{t:"Architect",d:"Design modules and database."},{t:"Develop",d:"Agile coding with weekly reviews."},{t:"Test",d:"Unit, feature and E2E before release."},{t:"Deploy",d:"Docker + CI/CD on your infrastructure."}]},
+        faq:{kicker:"FAQ",title:"Laravel questions",
+            items:[{q:"Which Laravel version do you use?",a:"Always the current LTS — Laravel 11 today."},{q:"Do you work with a specific front-end?",a:"Inertia + Vue/React or Livewire, depending on need."},{q:"Do you upgrade existing projects?",a:"Yes, version upgrades and performance improvements."},{q:"What is the monthly maintenance cost?",a:"From $150 for the base package; details on the pricing page."}]},
+        band:{t:"Your next system on Laravel",d:"From MVP to a mature SaaS product.",a1:{t:"Book a consultation",href:"contact.html"},a2:{t:"Pricing",href:"pricing.html"}}},
+    mobile:{
+        hero:{kicker:"Mobile Development",title:"iOS and Android apps, one codebase",sub:"Cross-platform with Flutter and React Native — faster delivery, lower cost."},
+        pnLabel:"Mobile",pn:[{id:"caps",l:"Capabilities"},{id:"tech",l:"Technology"},{id:"process",l:"Process"},{id:"feat",l:"Features"},{id:"faq",l:"FAQ"}],
+        caps:{kicker:"Capabilities",title:"The apps we build",
+            items:[{ic:"phone",t:"Consumer apps",d:"Stores, social and entertainment."},{ic:"rocket",t:"SaaS apps",d:"Mobile companion to your cloud product."},{ic:"code",t:"Enterprise apps",d:"Internal tools for staff and logistics."},{ic:"chart",t:"Mobile dashboards",d:"Reports and monitoring on the move."},{ic:"plug",t:"Hardware integration",d:"Bluetooth, GPS, camera and NFC."},{ic:"shield",t:"Secure apps",d:"End-to-end encryption and biometrics."}]},
+        tech:{kicker:"Technology",title:"Our mobile stack",
+            items:[{ic:"phone",n:"Flutter",d:"First choice for beautiful UI"},{ic:"code",n:"React Native",d:"Best for JS teams"},{ic:"shield",n:"Firebase",d:"Auth, push and analytics"},{ic:"cloud",n:"Supabase",d:"PostgreSQL + realtime"},{ic:"plug",n:"REST & GraphQL",d:"Connect to any backend"},{ic:"refresh",n:"Fastlane",d:"Automated releases"},{ic:"chart",n:"Sentry",d:"Error monitoring"},{ic:"cpu",n:"CI/CD",d:"GitHub Actions"}]},
+        proc:{kicker:"Process",title:"The app-building path",
+            steps:[{t:"Define",d:"Personas, user stories and roadmap."},{t:"UX design",d:"Wireframes and main flows."},{t:"UI & prototype",d:"Visual design and clickable prototype."},{t:"Develop",d:"Two-week sprints with TestFlight."},{t:"Release",d:"App Store and Google Play."}]},
+        feat:{kicker:"Features",title:"Standard features in our apps",
+            items:[{ic:"shield",t:"Biometric auth",d:"Fingerprint and Face ID."},{ic:"refresh",t:"Offline mode",d:"Automatic sync when reconnected."},{ic:"bolt",t:"Push notifications",d:"Firebase Cloud Messaging."},{ic:"globe",t:"Multilingual",d:"RTL support and Dari/Pashto."},{ic:"cpu",t:"Performance",d:"60fps and instant loads."},{ic:"chart",t:"Behaviour analytics",d:"Firebase Analytics & Mixpanel."}]},
+        faq:{kicker:"FAQ",title:"Mobile questions",
+            items:[{q:"Flutter or React Native?",a:"Flutter for bespoke UI, React Native for JS ecosystems."},{q:"Do you build a web version too?",a:"Yes — Flutter Web and React Native Web are supported."},{q:"Do you handle App Store release?",a:"Yes, we manage the full submission and review flow."},{q:"What post-launch support is included?",a:"A monthly maintenance package covering SDK updates and bug fixes."}]},
+        band:{t:"Build your app idea",d:"From MVP to apps with millions of users.",a1:{t:"Book a consultation",href:"contact.html"},a2:{t:"Pricing",href:"pricing.html"}}},
+    database:{
+        hero:{kicker:"Database Design",title:"A foundation that scales",sub:"Schema design, migration, optimisation and management of relational and NoSQL databases."},
+        pnLabel:"Database",pn:[{id:"caps",l:"Services"},{id:"tech",l:"Technologies"},{id:"schema",l:"Sample schema"},{id:"process",l:"Process"},{id:"faq",l:"FAQ"}],
+        caps:{kicker:"Services",title:"What we do",
+            items:[{ic:"db",t:"Schema design",d:"Normalised, scale-ready data modelling."},{ic:"refresh",t:"Data migration",d:"Zero-downtime moves from legacy systems."},{ic:"bolt",t:"Query optimisation",d:"Indexing and response-time reduction."},{ic:"shield",t:"Data security",d:"Encryption, backups and least-privilege access."},{ic:"chart",t:"Analytics & reporting",d:"Materialised views and OLAP."},{ic:"plug",t:"Integration",d:"ETL, CDC and sync pipelines."}]},
+        tech:{kicker:"Technologies",title:"Databases we work with",
+            items:[{ic:"db",n:"PostgreSQL",d:"First choice for SaaS"},{ic:"db",n:"MySQL",d:"Compatible and widespread"},{ic:"db",n:"MongoDB",d:"Document-oriented data"},{ic:"cpu",n:"Redis",d:"Cache and queues"},{ic:"cloud",n:"ElasticSearch",d:"Text search"},{ic:"bolt",n:"ClickHouse",d:"Big-data analytics"},{ic:"shield",n:"CockroachDB",d:"Distributed and resilient"},{ic:"refresh",n:"TimescaleDB",d:"Time-series data"}]},
+        schema:{kicker:"نمونه",title:"یک اسکیما چگونه دیده می‌شود",titleTbl:"users — نمونه",
+            cols:["ستون","نوع","توضیح"],
+            rows:[
+                {c:"id",t:"bigint",n:"کلید اصلی",pk:true},
+                {c:"email",t:"varchar(255)",n:"یکتا، ایندکس‌شده"},
+                {c:"password_hash",t:"varchar(255)",n:"bcrypt"},
+                {c:"role",t:"enum",n:"user, admin"},
+                {c:"created_at",t:"timestamptz",n:"default now()"},
+                {c:"deleted_at",t:"timestamptz",n:"حذف نرم"}
+            ]},
+        proc:{kicker:"Process",title:"The database design path",
+            steps:[{t:"Discover",d:"Requirements, entities and relationships."},{t:"Model",d:"ER diagram and normalisation."},{t:"Implement",d:"Migrations and seeders."},{t:"Optimise",d:"EXPLAIN, indexes and partitions."},{t:"Monitor",d:"Performance dashboards and alerts."}]},
+        faq:{kicker:"FAQ",title:"Database questions",
+            items:[{q:"PostgreSQL or MySQL?",a:"For SaaS and complex data we recommend PostgreSQL."},{q:"Do you recommend NoSQL too?",a:"Yes — MongoDB or ElasticSearch for catalogues, logs and search."},{q:"Do you set up automatic backups?",a:"Yes — daily backups plus WAL archive for point-in-time recovery."},{q:"What about migrating from Oracle or SQL Server?",a:"We have experience migrating to PostgreSQL with tools such as Ora2Pg."}]},
+        band:{t:"Reset your database foundation",d:"From a fresh design to optimising an existing system.",a1:{t:"Free consultation",href:"contact.html"},a2:{t:"Pricing",href:"pricing.html"}}},
     footer:{
         blurb:"Webify is a team of software developers focused on SaaS products, hosting and virtual servers.",
         news:{t:"Newsletter",ph:"Your email",btn:"Subscribe",ok:"Subscription registered. Thank you!"},
