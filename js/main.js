@@ -6,6 +6,49 @@
 (function () {
     "use strict";
 
+    var FLAT_L = null; // The raw flat dictionary
+    var L = null;      // The safely unflattened nested object for renderers
+    function flatten(obj, prefix, res) {
+        prefix = prefix || ''; res = res || {};
+        for (var key in obj) {
+            if (!obj.hasOwnProperty(key)) continue;
+            var val = obj[key], newKey = prefix ? prefix + '.' + key : key;
+            if (Array.isArray(val)) {
+                val.forEach(function(item, index) {
+                    if (typeof item === 'object' && item !== null) flatten(item, newKey + '.' + index, res);
+                    else res[newKey + '.' + index] = item;
+                });
+            } else if (typeof val === 'object' && val !== null) {
+                flatten(val, newKey, res);
+            } else { res[newKey] = val; }
+        }
+        return res;
+    }
+
+    function unflatten(flat) {
+        var result = {};
+        if (!flat) return result;
+        for (var key in flat) {
+            if (!flat.hasOwnProperty(key)) continue;
+            var keys = key.split('.');
+            var cur = result;
+            for (var i = 0; i < keys.length; i++) {
+                var k = keys[i];
+                if (i === keys.length - 1) {
+                    cur[k] = flat[key];
+                } else {
+                    var nextK = keys[i+1];
+                    var isNextArray = /^\d+$/.test(nextK);
+                    if (cur[k] === undefined || cur[k] === null) {
+                        cur[k] = isNextArray ? [] : {};
+                    }
+                    cur = cur[k];
+                }
+            }
+        }
+        return result;
+    }
+
     var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var root = document.documentElement, body = document.body;
     function $(s, c) { return (c || document).querySelector(s); }
@@ -21,6 +64,7 @@
     var L = null;
     var PAGE = body.dataset.page || "home";
     body.dataset.period = body.dataset.period || "m";
+
 
     /* ---------------- icons ---------------- */
     var ICONS = {
@@ -63,7 +107,11 @@
     function ic(n, cls) {
         return '<svg class="ic ' + (cls || "") + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONS[n] || "") + "</svg>";
     }
-    function t(k) { return k.split(".").reduce(function (o, p) { return o ? o[p] : undefined; }, L); }
+    function t(k) {
+        if (!FLAT_L) return "";
+        var val = FLAT_L[k];
+        return (val !== undefined && val !== null) ? val : "";
+    }
 
     /* ---------------- theme ---------------- */
     function applyTheme() {
@@ -199,13 +247,14 @@
     function translateStatic() {
         $$("[data-i18n]").forEach(function (el) {
             var v = t(el.dataset.i18n);
-            if (v !== undefined) el.innerHTML = v;
+            // Only replace innerHTML if we actually found a valid translation
+            if (v !== "") el.innerHTML = v;
         });
         $$("[data-i18n-ph]").forEach(function (el) {
-            var v = t(el.dataset.i18nPh); if (v !== undefined) el.placeholder = v;
+            var v = t(el.dataset.i18nPh); if (v !== "") el.placeholder = v;
         });
         $$("[data-i18n-alt]").forEach(function (el) {
-            var v = t(el.dataset.i18nAlt); if (v !== undefined) el.alt = v;
+            var v = t(el.dataset.i18nAlt); if (v !== "") el.alt = v;
         });
     }
     function wrapML() {
@@ -580,6 +629,31 @@
         }
     };
 
+
+    function unflatten(flat) {
+        var result = {};
+        if (!flat) return result;
+        for (var key in flat) {
+            if (!flat.hasOwnProperty(key)) continue;
+            var keys = key.split('.');
+            var cur = result;
+            for (var i = 0; i < keys.length; i++) {
+                var k = keys[i];
+                if (i === keys.length - 1) {
+                    cur[k] = flat[key];
+                } else {
+                    var nextK = keys[i+1];
+                    var isNextArray = /^\d+$/.test(nextK);
+                    if (cur[k] === undefined || cur[k] === null) {
+                        cur[k] = isNextArray ? [] : {};
+                    }
+                    cur = cur[k];
+                }
+            }
+        }
+        return result;
+    }
+
     function runRenders() {
         $$("[data-render]").forEach(function (el) {
             var key = el.dataset.render, fn = REG[key];
@@ -730,9 +804,29 @@
     function applyLang(code) {
         if (!WEBIFY_LANGS[code]) code = "prs";
         LANG = code; store.set("wb_lang", code);
-        L = WEBIFY_LANGS[code];
-        root.lang = L.htmlLang; root.dir = L.dir;
-        document.title = L.meta[PAGE] + " — Webify.af";
+
+        var raw = WEBIFY_LANGS[code];
+        if (!raw) return;
+
+        // AUTO-DETECT: Is the file already flat (has dots) or still nested?
+        var keys = Object.keys(raw);
+        var isFlat = keys.length > 0 && keys.some(function(k) { return k.indexOf('.') !== -1; });
+
+        if (isFlat) {
+            FLAT_L = raw; // Use as-is (Laravel style)
+        } else {
+            FLAT_L = flatten(raw); // Auto-flatten in memory if they are still nested!
+        }
+
+        // Rebuild nested objects in memory for complex JS renderers (Slider, Tiers, etc.)
+        L = unflatten(FLAT_L);
+
+        root.lang = FLAT_L["htmlLang"] || "en";
+        root.dir = FLAT_L["dir"] || "ltr";
+
+        var pageTitle = FLAT_L["meta." + PAGE] || "Webify";
+        document.title = pageTitle + " — Webify.af";
+
         buildTopstrip(); buildHeader(); buildDrawer(); buildFooter();
         applyTheme(); Mega.init();
         translateStatic(); wrapML(); runRenders(); refreshPrices();
